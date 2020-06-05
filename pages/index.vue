@@ -1,35 +1,53 @@
 <template>
   <div class="container">
     <div>
-      <logo />
-      <h1 class="title">
-        interactive-line-graph
-      </h1>
-      <h2 class="subtitle">
-        My first-class Nuxt.js project
-      </h2>
-      <div class="links">
-        <a href="https://nuxtjs.org/" target="_blank" class="button--green">
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey"
-        >
-          GitHub
-        </a>
-      </div>
+      <LineChart :chart-data="chartData" :options="chartOptions" />
+      <button @click="addData">Add Data</button>
     </div>
   </div>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-
+import LineChart from '@/components/LineChart.vue'
 export default {
-  components: {
-    Logo
+  components: { LineChart },
+  data: () => ({
+    chartData: {
+      datasets: [
+        {
+          data: [0.12, 0.1, 0.05],
+          fill: false
+        }
+      ],
+      labels: ['0', '50K', '100K', '150K', '200K']
+    },
+    chartOptions: {
+      scales: {
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: true
+            }
+          }
+        ]
+      }
+    }
+  }),
+  methods: {
+    addData() {
+      const newData = this.chartData.datasets[0].data
+      newData.push(newData[newData.length - 1] - 0.2)
+
+      this.chartData = {
+        ...this.chartData,
+        datasets: [
+          {
+            data: newData,
+            fill: false
+          }
+        ]
+      }
+    }
   }
 }
 </script>
